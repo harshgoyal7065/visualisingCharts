@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Fetch and Graph Data CSV</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="" />
+  </head>
+  <body>
+    <canvas id="chart" width="200" height="200"></canvas>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+    <script>
+      const xlabels = [];
+      const chan1temps = [];
+      const chan2temps = [];
+      const chan3temps = [];
+      const chan4temps = [];
+      const chan5temps = [];
+      const chan6temps = [];
+      const chan7temps = [];
+      const chan8temps = [];
+      createChart();
+      async function createChart() {
+        await getData();
+        const ctx = document.getElementById("chart").getContext("2d");
+
+        const myChart = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: xlabels,
+            datasets: [
+              {
+                label: "Chan 1",
+                data: chan1temps,
+                backgroundColor: ["rgba(255, 99, 132, 0.2)"],
+                borderColor: ["rgba(255, 99, 132, 1)"],
+                borderWidth: 1,
+              },
+              {
+                label: "Chan 2",
+                data: chan2temps,
+                backgroundColor: ["blue"],
+                borderColor: ["blue"],
+                borderWidth: 1,
+              },
+              {
+                label: "Chan 3",
+                data: chan3temps,
+                backgroundColor: ["red"],
+                borderColor: ["red"],
+                borderWidth: 1,
+              },
+              {
+                label: "Chan 4",
+                data: chan4temps,
+                backgroundColor: ["black"],
+                borderColor: ["black"],
+                borderWidth: 1,
+              },
+              {
+                label: "Chan 5",
+                data: chan5temps,
+                backgroundColor: ["brown"],
+                borderColor: ["brown"],
+                borderWidth: 1,
+              },
+              {
+                label: "Chan 6",
+                data: chan6temps,
+                backgroundColor: ["green"],
+                borderColor: ["green"],
+                borderWidth: 1,
+              },
+              {
+                label: "Chan 7",
+                data: chan7temps,
+                backgroundColor: ["cyan"],
+                borderColor: ["cyan"],
+                borderWidth: 1,
+              },
+              {
+                label: "Chan 8",
+                data: chan8temps,
+                backgroundColor: ["gray"],
+                borderColor: ["gray"],
+                borderWidth: 1,
+              },
+            ],
+          },
+        });
+      }
+
+      async function getData() {
+        var finalData = [];
+        const response = await fetch(
+          "https://raw.githubusercontent.com/harshgoyal7065/data/main/data2.csv"
+        );
+        const data = await response.text();
+
+        const rows = data.split("\n");
+
+        var filt = rows.filter(function (value, index, arr) {
+          return (
+            value != "TEMPERATURE SCANNER" &&
+            value != "" &&
+            value != "DATE,TIME,CHAN,CHAN,CHAN,CHAN,CHAN,CHAN,CHAN,CHAN" &&
+            value != "Dt/Mn,Hr:Min:Sec,01,02,03,04,05,06,07,08," &&
+            value.includes("Start") == false
+          );
+        });
+
+        filt.forEach((ele) => {
+          const col = ele.split(",");
+          const datecol = col[0];
+          const timecol = col[1];
+          xlabels.push(timecol);
+          const chan1 = col[2];
+          chan1temps.push(chan1);
+          const chan2 = col[3];
+          chan2temps.push(chan2);
+          const chan3 = col[4];
+          chan3temps.push(chan3);
+          const chan4 = col[5];
+          chan4temps.push(chan4);
+          const chan5 = col[6];
+          chan5temps.push(chan5);
+          const chan6 = col[7];
+          chan6temps.push(chan6);
+          const chan7 = col[8];
+          chan7temps.push(chan7);
+          const chan8 = col[9];
+          chan8temps.push(chan8);
+        });
+      }
+    </script>
+  </body>
+</html>
